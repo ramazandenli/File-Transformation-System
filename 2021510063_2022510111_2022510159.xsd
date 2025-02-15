@@ -1,0 +1,136 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="records" type="recordsType" />
+    <xs:complexType name="student_infoType">
+        <xs:sequence>
+            <xs:element name="name">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="19"></xs:maxLength>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="surname">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="29"></xs:maxLength>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="stuID">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-9]{4}510[0-9]{3}" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="gender">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="M|F" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="email" minOccurs="0">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value=".*@(gmail.com|hotmail.com|yahoo.com|ogr.deu.edu.tr)" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="phone" minOccurs="0">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="\(\+90\)[0-9]{3}-[0-9]{3}-[0-9]{4}" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="gradeType">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="0" />
+            <xs:maxInclusive value="100" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="grade_infoType">
+        <xs:sequence>
+            <xs:element type="gradeType" name="midterm" minOccurs="0" />
+            <xs:element type="gradeType" name="project" minOccurs="0" />
+            <xs:element type="gradeType" name="final" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute name="letter_grade" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="AA|BA|BB|CB|CC|DC|DD|FF" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:simpleType name="course_surveyRatingContentType">
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="1" />
+            <xs:maxInclusive value="5" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="course_surveyRatingType">
+        <xs:simpleContent>
+            <xs:extension base="course_surveyRatingContentType">
+                <xs:attribute name="hexVal_bigEnd" use="required">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="00000001" />
+                            <xs:enumeration value="00000002" />
+                            <xs:enumeration value="00000003" />
+                            <xs:enumeration value="00000004" />
+                            <xs:enumeration value="00000005" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="hexVal_littleEnd" use="required">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="01000000" />
+                            <xs:enumeration value="02000000" />
+                            <xs:enumeration value="03000000" />
+                            <xs:enumeration value="04000000" />
+                            <xs:enumeration value="05000000" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="decimal" use="required">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:int">
+                            <xs:enumeration value="16777216" />
+                            <xs:enumeration value="33554432" />
+                            <xs:enumeration value="50331648" />
+                            <xs:enumeration value="67108864" />
+                            <xs:enumeration value="83886080" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="rowType">
+        <xs:sequence>
+            <xs:element type="student_infoType" name="student_info" />
+            <xs:element type="grade_infoType" name="grade_info" />
+            <xs:element name="regularStudent" minOccurs="0">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="👍" />
+                        <xs:enumeration value="👎" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element type="course_surveyRatingType" name="course_surveyRating" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute type="xs:positiveInteger" name="id" use="required" />
+    </xs:complexType>
+    <xs:complexType name="recordsType">
+        <xs:sequence>
+            <xs:element type="rowType" name="row" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
